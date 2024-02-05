@@ -57,7 +57,17 @@ void Navigation::on_pushButton_giris_clicked()
 {
 
     db.handleMotor(true);
-    QMessageBox::information(this, "En yakın boş slot", db.findFirstAvailableSlot());
+    QString slotName =  db.findFirstAvailableSlot();
+    if(slotName.endsWith("1")){
+        slotName = "SlotA";
+    }
+    if(slotName.endsWith("2")){
+        slotName = "SlotB";
+    }
+    if(slotName.endsWith("3")){
+        slotName = "SlotC";
+    }
+    QMessageBox::information(this, "En yakın boş slot", slotName);
 
     QMessageBox *confirmationBox = new QMessageBox(QMessageBox::Question, "Onay", "Otoparka giriş yaptım.", QMessageBox::Yes | QMessageBox::No, this);
     confirmationBox->setButtonText(QMessageBox::Yes, "Evet");

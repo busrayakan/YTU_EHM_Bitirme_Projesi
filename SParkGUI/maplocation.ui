@@ -806,15 +806,20 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <widget class="QComboBox" name="comboBox_2">
     <property name="geometry">
      <rect>
-      <x>321</x>
+      <x>281</x>
       <y>0</y>
-      <width>101</width>
+      <width>141</width>
       <height>24</height>
      </rect>
     </property>
     <item>
      <property name="text">
       <string>Ayarlar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kullanıcıyı Sil</string>
      </property>
     </item>
     <item>

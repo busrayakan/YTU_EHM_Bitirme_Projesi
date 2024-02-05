@@ -29,6 +29,7 @@ private slots:
 
 
     void on_comboBox_2_currentIndexChanged(int index);
+    void handleUserDeleted();
 
 private:
 

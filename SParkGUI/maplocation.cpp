@@ -21,6 +21,8 @@ MapLocation::MapLocation(QWidget *parent, const QString& username) :
     ui->label_pic->setPixmap(pix.scaled(w,h,Qt::KeepAspectRatio));
 
 
+    connect(&db, &DatabaseHandler::userDeleted, this, &MapLocation::handleUserDeleted);
+
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_comboBoxLocation_currentIndexChanged(int)));
     int c = (db.getResCountFromFirebase() *100 ) / 3;
     int in = db.getInsideCountFromFirebase();
@@ -180,6 +182,10 @@ void MapLocation::on_comboBox_2_currentIndexChanged(int index)
 
         homePage->show();
         this->hide();
+    } else if(selectedSetting =="Kullanıcıyı Sil"){
+          pageIndex = 1;
+        db.deleteUserFromFirebase(m_username);
+
     }
 }
 
@@ -188,4 +194,13 @@ void MapLocation::removeButton(QPushButton* buttonToRemove)
     if (buttonToRemove) {
         buttonToRemove->hide();  // or buttonToRemove->setVisible(false);
     }
+}
+
+void MapLocation::handleUserDeleted()
+{
+   // if (!homePage) {
+        homePage = new HomePage(this);
+   // }
+    homePage->show();
+    this->hide();
 }

@@ -14,19 +14,17 @@ HandleLocation::HandleLocation(QWidget *parent) :
     QPushButton *backButton = new QPushButton("Geri Dön", this);
                               layout->addWidget(backButton);
 
-    // Connect the back button to the QWebEngineView's back() slot
-    //   connect(backButton, &QPushButton::clicked, m_view, &QWebEngineView::back);
     connect(backButton, &QPushButton::clicked, this, &HandleLocation::on_backButton_clicked);
-    // Add the QWebEngineView to the layout
+
     layout->addWidget(m_view);
 
-    // Create a new QWidget to serve as the central widget
+
     QWidget *centralWidget = new QWidget(this);
 
-    // Set the layout of the central widget
+
     centralWidget->setLayout(layout);
 
-    // Set the central widget of the QMainWindow
+
     setCentralWidget(centralWidget);
 
     QWebEnginePage *page = m_view->page();
@@ -57,7 +55,6 @@ HandleLocation::HandleLocation(QWidget *parent) :
     <body>
     <div id="map" style="width:100%;height:720px"></div>
 
-
     <script>
     function myMap() {
         var mapOptions = {
@@ -80,31 +77,41 @@ HandleLocation::HandleLocation(QWidget *parent) :
                 title: point.name
             });
 
-
-marker.addListener('click', function() {
-
-    var dialogBox = document.createElement('div');
-    dialogBox.style.width = '200px';
-    dialogBox.style.height = '100px';
-    dialogBox.style.background = '#fff';
-    dialogBox.style.position = 'fixed';
-    dialogBox.style.top = '50%';
-    dialogBox.style.left = '50%';
-    dialogBox.style.transform = 'translate(-50%, -50%)';
-    dialogBox.style.padding = '20px';
-    dialogBox.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
-    dialogBox.innerHTML = "<p>Otopark Noktası: " + point.name + "</p><button onclick='this.parentNode.remove()'>Evet</button><button onclick='this.parentNode.remove()'>Hayır</button>";
-    document.body.appendChild(dialogBox);
-});
-
+            marker.addListener('click', function() {
+                var dialogBox = document.createElement('div');
+                dialogBox.style.width = '200px';
+                dialogBox.style.height = '100px';
+                dialogBox.style.background = '#fff';
+                dialogBox.style.position = 'fixed';
+                dialogBox.style.top = '50%';
+                dialogBox.style.left = '50%';
+                dialogBox.style.transform = 'translate(-50%, -50%)';
+                dialogBox.style.padding = '20px';
+                dialogBox.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.1)';
+                dialogBox.innerHTML = "<p>Otopark Noktası: " + point.name + "</p><button onclick='this.parentNode.remove()'>Evet</button><button onclick='this.parentNode.remove()'>Hayır</button>";
+                document.body.appendChild(dialogBox);
+            });
         });
+
+        // Kullanıcının konumunu al ve haritaya ekleyerek işaretle
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var userMarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+                    map: map,
+                    title: 'Your Location',
+                    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'  // İsterseniz özel bir ikon kullanabilirsiniz
+                });
+            });
+        }
     }
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_OWN_API_KEY&callback=myMap"></script>
     </body>
     </html>
 )");
+
 
 }
 

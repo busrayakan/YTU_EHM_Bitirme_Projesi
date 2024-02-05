@@ -38,11 +38,12 @@ public:
     void handleResCount(int count);
     bool checkReservationStatus(const QString &username);
     void updateReservationStatus(const QString &username, bool newStatus);
+    void deleteUserFromFirebase(const QString &username);
 signals:
     void authenticationResult(bool isAuthenticated);
 
     void reservationStatus(bool isReserved);
-
+    void userDeleted();
 
 
 private  slots:

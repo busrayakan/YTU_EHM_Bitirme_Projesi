@@ -321,7 +321,7 @@ void DatabaseHandler::updateReservationStatus(const QString& username, bool hasR
     // Convert the JSON object to a byte array
     QJsonDocument doc(userData);
     QByteArray data = doc.toJson();
-
+    QString myUrl = "https://smartparkgui-fc48e-default-rtdb.europe-west1.firebasedatabase.app/Users/" + username + "/has_Reservation.json";
     // Send the data to Firebase
     QNetworkRequest request(QUrl("https://smartparkgui-fc48e-default-rtdb.europe-west1.firebasedatabase.app/Users/" + username + "/has_Reservation.json"));
    // request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -354,5 +354,23 @@ bool DatabaseHandler::checkReservationStatus(const QString& username)
     return hasReservation;
 }
 
+
+void DatabaseHandler::deleteUserFromFirebase(const QString& username)
+{
+    QNetworkRequest request(QUrl("https://smartparkgui-fc48e-default-rtdb.europe-west1.firebasedatabase.app/Users/" + username + ".json"));
+    QNetworkReply *deleteReply = m_networkManager->deleteResource(request);
+
+    connect(deleteReply, &QNetworkReply::finished, [=]() {
+        if (deleteReply->error() == QNetworkReply::NoError) {
+            qDebug() << "User deleted successfully";
+            emit userDeleted();  // Emit the signal upon successful deletion
+        } else {
+            qDebug() << "Failed to delete user:" << deleteReply->errorString();
+            // Handle the error, emit a signal or log the error message
+        }
+
+        deleteReply->deleteLater();
+    });
+}
 
 
